@@ -49,9 +49,9 @@ void GuiApp::setup(){
     guisignal->addDropdown("Buffer 0", FBmixoptions);
     ofxDatGuiFolder* fb0mix_thingsfolder = guisignal->addFolder("Buffer 0 Mix", ofColor::white);
     
-    fb0blendslider=fb0mix_thingsfolder->addSlider("mix amnt",-5.0,5.0);
-    fb0brightkeyamountslider=fb0mix_thingsfolder->addSlider("luma key V",0.00,1.00);
-    fb0brightkeythreshslider=fb0mix_thingsfolder->addSlider("luma key T",0.00,1.00);
+    fb0blendslider=fb0mix_thingsfolder->addSlider("Amount",-5.0,5.0);
+    fb0brightkeyamountslider=fb0mix_thingsfolder->addSlider("Velocity",0.00,1.00);
+    fb0brightkeythreshslider=fb0mix_thingsfolder->addSlider("Threshold",0.00,1.00);
     
     
     
