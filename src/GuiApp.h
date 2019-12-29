@@ -24,6 +24,10 @@ public:
     
 
 
+    // Pad things
+    ofxDatGui* padGui;
+    ofxDatGui2dPad* padBox;
+    ofRectangle* padArea;
     
     
     //channel1 hsb control strip

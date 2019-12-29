@@ -56,6 +56,7 @@ string B_1="B1 ";
 //
 // int guiscale=100;
 int guiwidth=275;
+int pad_W = 200;
 
 void GuiApp::setup(){
     
@@ -144,6 +145,13 @@ void GuiApp::setup(){
     
     //registertolistentoevents
     guisignal->onButtonEvent(this, &GuiApp::onButtonEvent);
+    // x/y pad
+    guisignal->addBreak();
+    padArea = new ofRectangle(0, 0, pad_W, pad_W);
+    //
+    guisignal->add2dPad("Buffer 0 X/Y", *padArea);
+    guisignal->on2dPadEvent(this, &GuiApp::on2dPadEvent);
+    //
     
     
     
@@ -278,14 +286,45 @@ void GuiApp::setup(){
     fb1_pixel_brightscale_slider->bind(fb1_pixel_brightscale);
     //registertolistentoevents
     guithings->onButtonEvent(this, &GuiApp::onButtonEvent);
-    
     ofxDatGuiLog::quiet();
     
   }
 
     void GuiApp::on2dPadEvent(ofxDatGui2dPadEvent e)
     {
+        int x_displace_bound = 1;
+        int y_displace_bound = 1;
+        int half_width = pad_W/2;
         cout << "point coordinates have changed to: x=" << e.x << " & y=" << e.y << endl;
+        /*
+         
+         x/y displacement pad
+         
+         */
+        if (e.x < half_width) {
+            // negative x
+            fb0_x_displace_slider->setValue(-x_displace_bound*(1-(e.x/half_width)));
+        }
+        if (e.x > half_width) {
+              // positive x
+              fb0_x_displace_slider->setValue(x_displace_bound*(1+((e.x-half_width)/half_width)));
+          }
+        if (e.x == half_width) {
+           // zero
+           fb0_x_displace_slider->setValue(0);
+               }
+        if (e.y < half_width) {
+            // negative x
+            fb0_y_displace_slider->setValue(-y_displace_bound*(1-(e.y/half_width)));
+        }
+        if (e.y > half_width) {
+              // positive x
+              fb0_y_displace_slider->setValue(y_displace_bound*(1+((e.y-half_width)/half_width)));
+          }
+        if (e.y == half_width) {
+               // zero
+               fb0_x_displace_slider->setValue(0);
+           }
     }
 
     void GuiApp::onDropdownEvent(ofxDatGuiDropdownEvent e)
