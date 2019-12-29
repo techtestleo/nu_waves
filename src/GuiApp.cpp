@@ -24,7 +24,7 @@ void GuiApp::setup(){
     vector<string> channel1options ={"channel1 none","channel1 cam1","channel1 syphon"};
   
  
-    guisignal->addDropdown("SELECT A camera", channel1options);
+    guisignal->addDropdown("CH1 IN", channel1options);
    
   
     vector<string> FBmixoptions ={"FB none","FB blend","FB key"};
