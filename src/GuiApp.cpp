@@ -10,7 +10,7 @@
 
 int fbob=60;
 
-int guiscale=275;
+
 
 // GUI Names
 string AMOUNT="Amount";
@@ -49,16 +49,21 @@ string B_POW_MAP="b pow map";
 string H_POW_AMOUNT="H pow amount";
 string S_POW_AMOUNT="S pow amount";
 string B_POW_AMOUNT="B pow amount";
-string CAMERA="Camera";
+string CAMERA="Camera ";
 string SYPHONER="Syphoner";
 string CH1="CH1 ";
 string B_0="B0 ";
 string B_1="B1 ";
+//
+// int guiscale=100;
+int guiwidth=275;
+
 void GuiApp::setup(){
     
     ofBackground(0);
     
     guisignal = new ofxDatGui( ofxDatGuiAnchor::TOP_LEFT );
+    guisignal->setWidth(guiwidth);
     guisignal->addFRM();
     guisignal->addBreak();
     
@@ -93,12 +98,7 @@ void GuiApp::setup(){
     fb0_hflip_toggle=fb0mix_thingsfolder->addToggle(B_0+H_MIRROR,false);
     fb0_vflip_toggle=fb0mix_thingsfolder->addToggle(B_0+V_MIRROR,false);
     
-    
 
-    
-    
-    
-   
     ///FB1mixcontrol
     guisignal->addDropdown("Buffer 1", FB1mixoptions);
     ofxDatGuiFolder* fb1mix_thingsfolder = guisignal->addFolder("Buffer 0 Mix", ofColor::white);
@@ -150,7 +150,8 @@ void GuiApp::setup(){
     
     
     ///-----------------------------------
-    guithings = new ofxDatGui(guiscale,0 );//ofxDatGuiAnchor::TOP_RIGHT );
+    guithings = new ofxDatGui(guiwidth,0 );//ofxDatGuiAnchor::TOP_RIGHT );
+    guithings->setWidth(guiwidth);
     guithings->addBreak();
 
     //channel1 hsb manipulation strip
