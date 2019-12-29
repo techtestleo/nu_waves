@@ -11,6 +11,8 @@
 int fbob=60;
 
 int guiscale=275;
+
+// GUI Names
 string AMOUNT="Amount";
 string VELOCITY="Velocity";
 string THRESHOLD="Threshold";
@@ -21,14 +23,16 @@ string DELAY="Delay";
 string HUE="Hue";
 string SAT="Sat";
 string BRIGHT="Bright";
-
 string H_INVERT="H invert";
 string S_INVERT="S invert";
 string B_INVERT="B invert";
-
 string H_MOD="H mod";
 string H_OFFSET="H offset";
-string H_lfo="H lfo";
+string H_LFO="H lfo";
+string X_DISPLACE="x displace";
+string Y_DISPLACE="y displace";
+string Z_DISPLACE="z displace";
+string ROTATE="Rotate";
 
 void GuiApp::setup(){
     
@@ -214,17 +218,17 @@ void GuiApp::setup(){
     fb0_saturation_slider= fb0_opsfolder->addSlider("Sat", 0.0, 20.0);
     fb0_bright_slider= fb0_opsfolder->addSlider("Bright", 0.0, 20.0);
     
-    fb0_hue_invert_toggle=fb0_opsfolder->addToggle("H invert",0);
-    fb0_saturation_invert_toggle=fb0_opsfolder->addToggle("S invert",0);
-    fb0_bright_invert_toggle=fb0_opsfolder->addToggle("B invert",0);
+    fb0_hue_invert_toggle=fb0_opsfolder->addToggle(H_INVERT,0);
+    fb0_saturation_invert_toggle=fb0_opsfolder->addToggle(S_INVERT,0);
+    fb0_bright_invert_toggle=fb0_opsfolder->addToggle(B_INVERT,0);
     
-    fb0_huex_mod_slider= fb0_opsfolder->addSlider("H mod", 0.0, 20.0);
-    fb0_huex_offset_slider= fb0_opsfolder->addSlider("H offset", -20.0, 20.0);
-    fb0_huex_lfo_slider= fb0_opsfolder->addSlider("H lfo", -20.0, 20.0);
+    fb0_huex_mod_slider= fb0_opsfolder->addSlider(H_MOD, 0.0, 20.0);
+    fb0_huex_offset_slider= fb0_opsfolder->addSlider(H_OFFSET, -20.0, 20.0);
+    fb0_huex_lfo_slider= fb0_opsfolder->addSlider(H_LFO, -20.0, 20.0);
     
-    fb0_x_displace_slider= fb0_opsfolder->addSlider("x displace", -20.0, 20.0);
-    fb0_y_displace_slider= fb0_opsfolder->addSlider("y displace", -20.0, 20.0);
-    fb0_z_displace_slider= fb0_opsfolder->addSlider("z displace", 90, 110.0);
+    fb0_x_displace_slider= fb0_opsfolder->addSlider(X_DISPLACE, -20.0, 20.0);
+    fb0_y_displace_slider= fb0_opsfolder->addSlider(Y_DISPLACE, -20.0, 20.0);
+    fb0_z_displace_slider= fb0_opsfolder->addSlider(Z_DISPLACE, 90, 110.0);
     fb0_rotate_slider=fb0_opsfolder->addSlider("rotate", -157.07, 157.07);
     
     
@@ -246,17 +250,17 @@ void GuiApp::setup(){
     fb1_saturation_slider= fb1_opsfolder->addSlider("Sat", 0.0, 20.0);
     fb1_bright_slider= fb1_opsfolder->addSlider("Bright", 0.0, 20.0);
     
-    fb1_hue_invert_toggle=fb1_opsfolder->addToggle("H invert",0);
-    fb1_saturation_invert_toggle=fb1_opsfolder->addToggle("S invert",0);
-    fb1_bright_invert_toggle=fb1_opsfolder->addToggle("B invert",0);
+    fb1_hue_invert_toggle=fb1_opsfolder->addToggle(H_INVERT,0);
+    fb1_saturation_invert_toggle=fb1_opsfolder->addToggle(S_INVERT,0);
+    fb1_bright_invert_toggle=fb1_opsfolder->addToggle(B_INVERT,0);
     
-    fb1_huex_mod_slider= fb1_opsfolder->addSlider("H mod", 0.0, 20.0);
-    fb1_huex_offset_slider= fb1_opsfolder->addSlider("H offset", -20.0, 20.0);
-    fb1_huex_lfo_slider= fb1_opsfolder->addSlider("H lfo", -20.0, 20.0);
+    fb1_huex_mod_slider= fb1_opsfolder->addSlider(H_MOD, 0.0, 20.0);
+    fb1_huex_offset_slider= fb1_opsfolder->addSlider(H_OFFSET, -20.0, 20.0);
+    fb1_huex_lfo_slider= fb1_opsfolder->addSlider(H_LFO, -20.0, 20.0);
     
-    fb1_x_displace_slider= fb1_opsfolder->addSlider("x displace", -20.0, 20.0);
-    fb1_y_displace_slider= fb1_opsfolder->addSlider("y displace", -20.0, 20.0);
-    fb1_z_displace_slider= fb1_opsfolder->addSlider("z displace", 90, 110);
+    fb1_x_displace_slider= fb1_opsfolder->addSlider(X_DISPLACE, -20.0, 20.0);
+    fb1_y_displace_slider= fb1_opsfolder->addSlider(Y_DISPLACE, -20.0, 20.0);
+    fb1_z_displace_slider= fb1_opsfolder->addSlider(Z_DISPLACE, 90, 110);
     fb1_rotate_slider=fb1_opsfolder->addSlider("rotate", -157.07, 157.07);
     
     
