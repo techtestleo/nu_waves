@@ -22,7 +22,7 @@ int main(){
     
      //settings.setSize(1280,720);
 
-    settings.setSize(640, 480);
+    settings.setSize(1280, 960);
     settings.setPosition(ofVec2f(550,0));
     settings.resizable = true;
     //settings.decorated = false;
