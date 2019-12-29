@@ -27,8 +27,8 @@ void GuiApp::setup(){
     guisignal->addDropdown("CH1 IN", channel1options);
    
   
-    vector<string> FBmixoptions ={"FB none","FB blend","FB key"};
-    vector<string> FB1mixoptions ={"FB1 none","FB1 blend","FB1 key"};
+    vector<string> FBmixoptions ={"None","Blend","Key"};
+    vector<string> FB1mixoptions ={"None","Blend","Key"};
     
  
     
