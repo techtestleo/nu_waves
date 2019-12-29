@@ -284,6 +284,10 @@ void GuiApp::setup(){
     
   }
 
+    void GuiApp::on2dPadEvent(ofxDatGui2dPadEvent e)
+    {
+        cout << "point coordinates have changed to: x=" << e.x << " & y=" << e.y << endl;
+    }
 
     void GuiApp::onDropdownEvent(ofxDatGuiDropdownEvent e)
     {

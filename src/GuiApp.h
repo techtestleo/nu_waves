@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxDatGui.h"
+#include "ofRectangle.h"
 
 class GuiApp : public ofBaseApp{
     
@@ -13,7 +14,6 @@ public:
   
     ofxDatGui* guisignal;
     ofxDatGui* guithings;
-    
     ofxDatGui* guiFBops;
     ofxDatGui* guiPixelate;
     
@@ -48,20 +48,6 @@ public:
     ofxDatGuiButton* channel1satinverttoggle;
     ofxDatGuiButton* channel1brightinverttoggle;
 
-    
-    
-    
-    
-   
-    
-   
-    
-    
-    
-   
-
-
- 
     
     
     
@@ -220,6 +206,8 @@ public:
     
     void onDropdownEvent(ofxDatGuiDropdownEvent e);
     void onButtonEvent(ofxDatGuiButtonEvent e);
+    void on2dPadEvent(ofxDatGui2dPadEvent e);
+    
     
   
     
