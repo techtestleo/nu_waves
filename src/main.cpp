@@ -36,6 +36,7 @@ int main(){
     
     shared_ptr<ofApp> mainApp(new ofApp);
     shared_ptr<GuiApp> guiApp(new GuiApp);
+    
     mainApp->gui = guiApp;
     
     ofRunApp(guiWindow, guiApp);
