@@ -21,7 +21,7 @@ void GuiApp::setup(){
     guisignal->addBreak();
     
     guisignal->addTextInput("nu_waves", "# v0.1 #");
-    vector<string> channel1options ={"channel1 none","channel1 cam1","channel1 syphon"};
+    vector<string> channel1options ={"None","Camera","Syphoner"};
   
  
     guisignal->addDropdown("CH1 IN", channel1options);
