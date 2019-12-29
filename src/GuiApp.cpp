@@ -34,6 +34,11 @@ string Y_DISPLACE="y displace";
 string Z_DISPLACE="z displace";
 string ROTATE="Rotate";
 
+string TOGGLE="Toggle";
+string QUANT="quantisation";
+string MIX="mix";
+string B_SCALE="bright scale";
+
 void GuiApp::setup(){
     
     ofBackground(0);
@@ -177,13 +182,13 @@ void GuiApp::setup(){
     channel1satwraptoggle=channel1_thingsfolder->addToggle("Wrap Sat",false);
     channel1brightwraptoggle=channel1_thingsfolder->addToggle("Wrap Bright",false);
     
-    channel1huepowmaptoggle=channel1_thingsfolder->addToggle("Hue pow map",false);
-    channel1satpowmaptoggle=channel1_thingsfolder->addToggle("sat pow map",false);
-    channel1brightpowmaptoggle=channel1_thingsfolder->addToggle("bright pow map",false);
+    channel1huepowmaptoggle=channel1_thingsfolder->addToggle("H pow map",false);
+    channel1satpowmaptoggle=channel1_thingsfolder->addToggle("s pow map",false);
+    channel1brightpowmaptoggle=channel1_thingsfolder->addToggle("b pow map",false);
     
-    channel1huepowmapslider= channel1_thingsfolder->addSlider("hue pow amount", -4.0, 4.0);
-    channel1saturationpowmapslider= channel1_thingsfolder->addSlider("sat pow amount", -4.0, 4.0);
-    channel1brightpowmapslider= channel1_thingsfolder->addSlider("bright pow amount", -4.0, 4.0);
+    channel1huepowmapslider= channel1_thingsfolder->addSlider("H pow amount", -4.0, 4.0);
+    channel1saturationpowmapslider= channel1_thingsfolder->addSlider("S pow amount", -4.0, 4.0);
+    channel1brightpowmapslider= channel1_thingsfolder->addSlider("B pow amount", -4.0, 4.0);
     
   
    // channel1_thingsfolder->expand();
@@ -210,13 +215,14 @@ void GuiApp::setup(){
     channel1saturationpowmapslider->bind(channel1saturationpowmap);
     channel1brightpowmapslider->bind(channel1brightpowmap);
     
-  
+  // pixel controls
+  ofxDatGuiFolder* allpixelfolder = guithings->addFolder("Pixelate", ofColor::white);
     
     //fb0
     ofxDatGuiFolder* fb0_opsfolder = guithings->addFolder("Buffer 0 ops", ofColor::white);
-    fb0_hue_slider= fb0_opsfolder->addSlider("Hue", 0.0, 20.0);
-    fb0_saturation_slider= fb0_opsfolder->addSlider("Sat", 0.0, 20.0);
-    fb0_bright_slider= fb0_opsfolder->addSlider("Bright", 0.0, 20.0);
+    fb0_hue_slider= fb0_opsfolder->addSlider(HUE, 0.0, 20.0);
+    fb0_saturation_slider= fb0_opsfolder->addSlider(SAT, 0.0, 20.0);
+    fb0_bright_slider= fb0_opsfolder->addSlider(BRIGHT, 0.0, 20.0);
     
     fb0_hue_invert_toggle=fb0_opsfolder->addToggle(H_INVERT,0);
     fb0_saturation_invert_toggle=fb0_opsfolder->addToggle(S_INVERT,0);
@@ -229,7 +235,7 @@ void GuiApp::setup(){
     fb0_x_displace_slider= fb0_opsfolder->addSlider(X_DISPLACE, -20.0, 20.0);
     fb0_y_displace_slider= fb0_opsfolder->addSlider(Y_DISPLACE, -20.0, 20.0);
     fb0_z_displace_slider= fb0_opsfolder->addSlider(Z_DISPLACE, 90, 110.0);
-    fb0_rotate_slider=fb0_opsfolder->addSlider("rotate", -157.07, 157.07);
+    fb0_rotate_slider=fb0_opsfolder->addSlider(ROTATE, -157.07, 157.07);
     
     
     
@@ -246,9 +252,9 @@ void GuiApp::setup(){
     
     //fb1
     ofxDatGuiFolder* fb1_opsfolder = guithings->addFolder("Buffer 1 ops", ofColor::white);
-    fb1_hue_slider= fb1_opsfolder->addSlider("Hue", 0.0, 20.0);
-    fb1_saturation_slider= fb1_opsfolder->addSlider("Sat", 0.0, 20.0);
-    fb1_bright_slider= fb1_opsfolder->addSlider("Bright", 0.0, 20.0);
+    fb1_hue_slider= fb1_opsfolder->addSlider(HUE, 0.0, 20.0);
+    fb1_saturation_slider= fb1_opsfolder->addSlider(SAT, 0.0, 20.0);
+    fb1_bright_slider= fb1_opsfolder->addSlider(BRIGHT, 0.0, 20.0);
     
     fb1_hue_invert_toggle=fb1_opsfolder->addToggle(H_INVERT,0);
     fb1_saturation_invert_toggle=fb1_opsfolder->addToggle(S_INVERT,0);
@@ -261,7 +267,7 @@ void GuiApp::setup(){
     fb1_x_displace_slider= fb1_opsfolder->addSlider(X_DISPLACE, -20.0, 20.0);
     fb1_y_displace_slider= fb1_opsfolder->addSlider(Y_DISPLACE, -20.0, 20.0);
     fb1_z_displace_slider= fb1_opsfolder->addSlider(Z_DISPLACE, 90, 110);
-    fb1_rotate_slider=fb1_opsfolder->addSlider("rotate", -157.07, 157.07);
+    fb1_rotate_slider=fb1_opsfolder->addSlider(ROTATE, -157.07, 157.07);
     
     
     
@@ -278,11 +284,11 @@ void GuiApp::setup(){
     
     
     //cam1
-    ofxDatGuiFolder* cam1_pixelfolder = guithings->addFolder("cam1 pixelate", ofColor::white);
-    cam1_pixel_toggle=cam1_pixelfolder->addToggle("cam1 pixel switch",0);
-    cam1_pixel_scale_slider=cam1_pixelfolder->addSlider("quantisation",0,256);
-    cam1_pixel_mix_slider=cam1_pixelfolder->addSlider("mix",-2,2);
-    cam1_pixel_brightscale_slider=cam1_pixelfolder->addSlider("bright scale",-10,10);
+    ofxDatGuiFolder* cam1_pixelfolder = guithings->addFolder("camera P", ofColor::white);
+    cam1_pixel_toggle=cam1_pixelfolder->addToggle(TOGGLE,0);
+    cam1_pixel_scale_slider=cam1_pixelfolder->addSlider(QUANT,0,256);
+    cam1_pixel_mix_slider=cam1_pixelfolder->addSlider(MIX,-2,2);
+    cam1_pixel_brightscale_slider=cam1_pixelfolder->addSlider(B_SCALE,-10,10);
     
     
     cam1_pixel_scale_slider->bind(cam1_pixel_scale);
@@ -295,11 +301,11 @@ void GuiApp::setup(){
     
     
     //fb0
-    ofxDatGuiFolder* fb0_pixelfolder = guithings->addFolder("fb0 pixelate", ofColor::white);
-    fb0_pixel_toggle=fb0_pixelfolder->addToggle("fb0 pixel switch",0);
-    fb0_pixel_scale_slider=fb0_pixelfolder->addSlider("quantisation",0,256);
-    fb0_pixel_mix_slider=fb0_pixelfolder->addSlider("mix",-2,2);
-    fb0_pixel_brightscale_slider=fb0_pixelfolder->addSlider("bright scale",-10,10);
+    ofxDatGuiFolder* fb0_pixelfolder = guithings->addFolder("Buffer 0 P", ofColor::white);
+    fb0_pixel_toggle=fb0_pixelfolder->addToggle(TOGGLE,0);
+    fb0_pixel_scale_slider=fb0_pixelfolder->addSlider(QUANT,0,256);
+    fb0_pixel_mix_slider=fb0_pixelfolder->addSlider(MIX,-2,2);
+    fb0_pixel_brightscale_slider=fb0_pixelfolder->addSlider(B_SCALE,-10,10);
     
     
     fb0_pixel_scale_slider->bind(fb0_pixel_scale);
@@ -307,11 +313,11 @@ void GuiApp::setup(){
     fb0_pixel_brightscale_slider->bind(fb0_pixel_brightscale);
     
     //fb1
-    ofxDatGuiFolder* fb1_pixelfolder = guithings->addFolder("fb1 pixelate", ofColor::white);
-    fb1_pixel_toggle=fb1_pixelfolder->addToggle("fb1 pixel switch",0);
-    fb1_pixel_scale_slider=fb1_pixelfolder->addSlider("quantisation",0,256);
-    fb1_pixel_mix_slider=fb1_pixelfolder->addSlider("mix",-2,2);
-    fb1_pixel_brightscale_slider=fb1_pixelfolder->addSlider("bright scale",-10,10);
+    ofxDatGuiFolder* fb1_pixelfolder = guithings->addFolder("Buffer 1 P", ofColor::white);
+    fb1_pixel_toggle=fb1_pixelfolder->addToggle(TOGGLE,0);
+    fb1_pixel_scale_slider=fb1_pixelfolder->addSlider(QUANT,0,256);
+    fb1_pixel_mix_slider=fb1_pixelfolder->addSlider(MIX,-2,2);
+    fb1_pixel_brightscale_slider=fb1_pixelfolder->addSlider(B_SCALE,-10,10);
     
     
     fb1_pixel_scale_slider->bind(fb1_pixel_scale);
