@@ -13,7 +13,6 @@
 #include "ofMain.h"
 //#include "ofxMidi.h"
 #include "GuiApp.h"
-#include "PadApp.h"
 #include "ofxSyphon.h"
 
 class ofApp : public ofBaseApp {
