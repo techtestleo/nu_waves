@@ -11,6 +11,12 @@
 int fbob=60;
 
 int guiscale=275;
+string AMOUNT="Amount";
+string VELOCITY="Velocity";
+string THRESHOLD="Threshold";
+string NONE="None";
+string BLEND="Blend";
+string KEY="Key";
 
 void GuiApp::setup(){
     
@@ -21,14 +27,14 @@ void GuiApp::setup(){
     guisignal->addBreak();
     
     guisignal->addTextInput("nu_waves", "# v0.1 #");
-    vector<string> channel1options ={"None","Camera","Syphoner"};
+    vector<string> channel1options ={NONE,"Camera","Syphoner"};
   
  
     guisignal->addDropdown("CH1 IN", channel1options);
    
   
-    vector<string> FBmixoptions ={"None","Blend","Key"};
-    vector<string> FB1mixoptions ={"None","Blend","Key"};
+    vector<string> FBmixoptions ={NONE,BLEND,KEY};
+    vector<string> FB1mixoptions ={NONE,BLEND,KEY};
     
  
     
@@ -57,14 +63,14 @@ void GuiApp::setup(){
     
     fb0brightkeyamountslider->bind(fb0lumakeyvalue);
     fb0brightkeythreshslider->bind(fb0lumakeythresh);
-    fb0delayamountslider=fb0mix_thingsfolder->addSlider("fb0 delay amnt",0,fbob-1);
+    fb0delayamountslider=fb0mix_thingsfolder->addSlider("Delay",0,fbob-1);
     
     fb0blendslider->bind(fb0blend);
   
     fb0delayamountslider->bind(fb0delayamnt);
     
-    fb0_hflip_toggle=fb0mix_thingsfolder->addToggle("fb0 h mirror",false);
-    fb0_vflip_toggle=fb0mix_thingsfolder->addToggle("fb0 v mirror",false);
+    fb0_hflip_toggle=fb0mix_thingsfolder->addToggle("Buffer 0 H Mirror",false);
+    fb0_vflip_toggle=fb0mix_thingsfolder->addToggle("Buffer 0 V Mirror",false);
     
     
 
@@ -73,8 +79,8 @@ void GuiApp::setup(){
     
    
     ///FB1mixcontrol
-    guisignal->addDropdown("FB1_mixoptions", FB1mixoptions);
-    ofxDatGuiFolder* fb1mix_thingsfolder = guisignal->addFolder("FB1mixthings", ofColor::white);
+    guisignal->addDropdown("Buffer 1", FB1mixoptions);
+    ofxDatGuiFolder* fb1mix_thingsfolder = guisignal->addFolder("Buffer 0 Mix", ofColor::white);
     
     fb1blendslider=fb1mix_thingsfolder->addSlider("mix amnt",-5.0,5.0);
     fb1brightkeyamountslider=fb1mix_thingsfolder->addSlider("luma key V",0.00,1.00);
