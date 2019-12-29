@@ -20,7 +20,7 @@ void GuiApp::setup(){
     guisignal->addFRM();
     guisignal->addBreak();
     
-    guisignal->addTextInput("Signal Flow", "# open frameworks #");
+    guisignal->addTextInput("nu_waves", "# v0.1 #");
     vector<string> channel1options ={"channel1 none","channel1 cam1","channel1 syphon"};
   
  
