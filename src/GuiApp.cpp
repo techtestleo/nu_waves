@@ -53,10 +53,18 @@ string SYPHONER="Syphoner";
 string CH1="CH1 ";
 string B_0="B0 ";
 string B_1="B1 ";
+string XY="X / Y";
 //
 // int guiscale=100;
 int guiwidth=275;
+
+// Pad variables
+// Modify the bounds to control the maximum amount of displacement.
+int x_displace_bound = 3;
+int y_displace_bound = 3;
+// pad_W 200 gives 100 points of control either side of zero.
 int pad_W = 200;
+int half_width = pad_W/2;
 
 void GuiApp::setup(){
     
@@ -101,7 +109,7 @@ void GuiApp::setup(){
 
     ///FB1mixcontrol
     guisignal->addDropdown("Buffer 1", FB1mixoptions);
-    ofxDatGuiFolder* fb1mix_thingsfolder = guisignal->addFolder("Buffer 0 Mix", ofColor::white);
+    ofxDatGuiFolder* fb1mix_thingsfolder = guisignal->addFolder("Buffer 1 Mix", ofColor::white);
     
     fb1blendslider=fb1mix_thingsfolder->addSlider(AMOUNT,-5.0,5.0);
     fb1brightkeyamountslider=fb1mix_thingsfolder->addSlider(VELOCITY,0.00,1.00);
@@ -147,10 +155,6 @@ void GuiApp::setup(){
     guisignal->onButtonEvent(this, &GuiApp::onButtonEvent);
     // x/y pad
     guisignal->addBreak();
-    padArea = new ofRectangle(0, 0, pad_W, pad_W);
-    //
-    guisignal->add2dPad("Buffer 0 X/Y", *padArea);
-    guisignal->on2dPadEvent(this, &GuiApp::on2dPadEvent);
     //
     
     
@@ -286,45 +290,84 @@ void GuiApp::setup(){
     fb1_pixel_brightscale_slider->bind(fb1_pixel_brightscale);
     //registertolistentoevents
     guithings->onButtonEvent(this, &GuiApp::onButtonEvent);
+    padArea = new ofRectangle(0, 0, pad_W, pad_W);
+    // X/Y Pads
+    guithings->add2dPad(B_0+XY, *padArea);
+    guithings->addBreak();
+    guithings->add2dPad(B_1+XY, *padArea);
+    // Listen to pad events
+    guithings->on2dPadEvent(this, &GuiApp::on2dPadEvent);
+    guithings->addBreak();
+    //
     ofxDatGuiLog::quiet();
     
   }
 
+    // Pad event handler
     void GuiApp::on2dPadEvent(ofxDatGui2dPadEvent e)
     {
-        int x_displace_bound = 1;
-        int y_displace_bound = 1;
-        int half_width = pad_W/2;
-        cout << "point coordinates have changed to: x=" << e.x << " & y=" << e.y << endl;
-        /*
-         
-         x/y displacement pad
-         
-         */
-        if (e.x < half_width) {
-            // negative x
-            fb0_x_displace_slider->setValue(-x_displace_bound*(1-(e.x/half_width)));
-        }
-        if (e.x > half_width) {
+    //   negative translation: -(x_displace_bound*(half_width-e.x)/100)
+    //
+    //   -: minus moves left/down
+    //
+    //   x_displace_bound: user defined upper bound
+    //
+    //   *: multiply by <1 to reduce value
+    //
+    //   half_width-e.x: capture the difference between input and middle
+    //
+    //   /100: express as percentage
+    //
+    //   positive translation: x_displace_bound*((e.x/half_width)-1)
+    //
+    //   positive x_displace moves right/up
+    //
+    //   x_displace_bound: user defined upper bound
+    //
+    //   *: multiply by >1 to increase value
+    //
+    //   e.x/half_width: e.x will always be greater than half_width, so result will be 1.(e.x)
+    //
+    //   -1: grab percantage increase by reducing result by 1
+     
+        // Buffer 0 X/Y
+        if (e.target->getLabel() ==B_0+XY) {
+            if (e.x < half_width) {
+                // negative x
+                fb0_x_displace_slider->setValue(-(x_displace_bound*(half_width-e.x)/100));
+            }
+            if (e.x > half_width) {
+                // positive x
+                fb0_x_displace_slider->setValue(x_displace_bound*((e.x/half_width)-1));
+            }
+            if (e.y < half_width) {
+                // negative x
+                fb0_y_displace_slider->setValue(-(y_displace_bound*(half_width-e.y)/100));
+            }
+            if (e.y > half_width) {
               // positive x
-              fb0_x_displace_slider->setValue(x_displace_bound*(1+((e.x-half_width)/half_width)));
-          }
-        if (e.x == half_width) {
-           // zero
-           fb0_x_displace_slider->setValue(0);
-               }
-        if (e.y < half_width) {
-            // negative x
-            fb0_y_displace_slider->setValue(-y_displace_bound*(1-(e.y/half_width)));
+                fb0_y_displace_slider->setValue(y_displace_bound*((e.y/half_width)-1));
+            }
         }
-        if (e.y > half_width) {
-              // positive x
-              fb0_y_displace_slider->setValue(y_displace_bound*(1+((e.y-half_width)/half_width)));
+        // Buffer 1 X/Y
+        if (e.target->getLabel() ==B_1+XY) {
+          if (e.x < half_width) {
+              // negative x
+              fb1_x_displace_slider->setValue(-(x_displace_bound*(half_width-e.x)/100));
           }
-        if (e.y == half_width) {
-               // zero
-               fb0_x_displace_slider->setValue(0);
-           }
+          if (e.x > half_width) {
+              // positive x
+              fb1_x_displace_slider->setValue(x_displace_bound*((e.x/half_width)-1));
+          }
+          if (e.y < half_width) {
+              // negative x
+              fb1_y_displace_slider->setValue(-(y_displace_bound*(half_width-e.y)/100));
+          }
+          if (e.y > half_width) {
+            // positive x
+              fb1_y_displace_slider->setValue(y_displace_bound*((e.y/half_width)-1));
+          }
+              }
     }
 
     void GuiApp::onDropdownEvent(ofxDatGuiDropdownEvent e)

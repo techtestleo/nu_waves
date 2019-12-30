@@ -212,9 +212,6 @@ public:
     void onButtonEvent(ofxDatGuiButtonEvent e);
     void on2dPadEvent(ofxDatGui2dPadEvent e);
     
-    
-  
-    
     int channel1=1;
    
     

@@ -269,7 +269,7 @@ void ofApp::setup() {
     tri2.set(-1,-1,1);
     tri3.set(-1,1,-1);
     tri4.set(1,-1,-1);
-    float shapeScale=ofGetWidth()/8;
+    float shapeScale=ofGetWidth()/16;
     
     tri1=tri1*shapeScale;
     tri2=tri2*shapeScale;
