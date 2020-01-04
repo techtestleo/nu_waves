@@ -2,15 +2,17 @@
 
 #include "ofMain.h"
 #include "ofxDatGui.h"
+#include "ofxMidi.h"
 #include "ofRectangle.h"
 
-class GuiApp : public ofBaseApp{
+class GuiApp : public ofBaseApp,  public ofxMidiListener {
     
 public:
 public:
     void setup();
     void update();
     void draw();
+    void exit();
   
     ofxDatGui* guisignal;
     ofxDatGui* guithings;
@@ -21,6 +23,12 @@ public:
     //syphon output switch
     ofxDatGuiToggle* syphonOutputtoggle;
     bool syphonOutput=0;
+    // midi
+    void newMidiMessage(ofxMidiMessage& eventArgs);
+    
+    ofxMidiIn midiIn;
+    std::vector<ofxMidiMessage> midiMessages;
+    std::size_t maxMessages = 10; //< max number of messages to keep track of
     
 
 

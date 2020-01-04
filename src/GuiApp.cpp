@@ -54,6 +54,15 @@ string CH1="CH1 ";
 string B_0="B0 ";
 string B_1="B1 ";
 string XY="X / Y";
+// midi
+float c1=1;
+float c2=1;
+float c3=1;
+float c4=1;
+float c5=1;
+float c6=1;
+float c7=1;
+float c8=1;
 //
 // int guiscale=100;
 int guiwidth=275;
@@ -67,6 +76,24 @@ int pad_W = 200;
 int half_width = pad_W/2;
 
 void GuiApp::setup(){
+    // midi
+        // print input ports to console
+        midiIn.listInPorts();
+        
+        // open port by number (you may need to change this)
+        midiIn.openPort(00);
+    //    midiIn.openPort("From MPKmini2");    // by name
+        //midiIn.openVirtualPort("ofxMidiIn Input"); // open a virtual port
+        
+        // don't ignore sysex, timing, & active sense messages,
+        // these are ignored by default
+        midiIn.ignoreTypes(false, false, false);
+        
+        // add ofApp as a listener
+        midiIn.addListener(this);
+        
+        // print received messages to the console
+        midiIn.setVerbose(true);
     
     ofBackground(0);
     
@@ -475,15 +502,135 @@ void GuiApp::onButtonEvent(ofxDatGuiButtonEvent e)
     }
 }
 
+void GuiApp::newMidiMessage(ofxMidiMessage& msg) {
+
+    // add the latest message to the message queue
+    midiMessages.push_back(msg);
+
+    // remove any old messages if we have too many
+    while(midiMessages.size() > maxMessages) {
+        midiMessages.erase(midiMessages.begin());
+    }
+}
+
+
 //----------------------------------
     void GuiApp::update() {
        
     }
+void GuiApp::exit() {
+    
+    // clean up
+    midiIn.closePort();
+    midiIn.removeListener(this);
+}
 
 
 //------------------------------
     void GuiApp::draw() {
+          /*midimessagesbiz**/
+               
+               
+               //ofTranslate(0,0,-100);
+               for(unsigned int i = 0; i < midiMessages.size(); ++i) {
         
+                   ofxMidiMessage &message = midiMessages[i];
+                   int x = 10;
+                   int y = i*40 + 40;
+               
+                   // draw the last recieved message contents to the screen,
+                   // this doesn't print all the data from every status type
+                   // but you should get the general idea
+//                   stringstream text;
+//                   text << ofxMidiMessage::getStatusString(message.status);
+//                   while(text.str().length() < 16) { // pad status width
+//                       text << " ";
+//                   }
+        //
+                
+                   ofSetColor(127);
+                   if(message.status < MIDI_SYSEX) {
+                       //text << "chan: " << message.channel;
+                       if(message.status == MIDI_CONTROL_CHANGE) {
+        
+                           //MIDIMAPZONE
+                           //these are all set to output bipolor controls at this moment (ranging from -1.0 to 1.0)
+                           //if u uncomment the second line on each of these if statements that will switch thems to unipolor
+                           //controls (ranging from 0.0to 1.0) if  you prefer
+                           //then find the variable that youd like to control down in CAVARIABLEZONES or MIXERVARIBLEZONES
+                           //and substitute c1,c2, ..cn whichever control knob u wish the map
+                           
+                           if(message.control==5){
+                               c1=(message.value-63.0)/63.0;
+                               //  c1=(message.value)/127.00;
+                               fb0_x_displace_slider->setValue(c1);
+                               
+                           }
+                           
+                           if(message.control==21){
+                               c2=(message.value-63.0)/63.0;
+                               //  c2=(message.value)/127.00;
+                               
+                           }
+                           
+                           if(message.control==22){
+                               c3=(message.value-63.0)/63.00;
+                               //  c3=(message.value)/127.00;
+                           }
+                           
+                           if(message.control==23){
+                                c4=(message.value-63.0)/63.00;
+                              // c4=(message.value)/127.00;
+                              
+                           }
+                           
+                           if(message.control==24){
+                                c5=(message.value-63.0)/63.00;
+                             //  c5=(message.value)/127.00;
+                             
+                           }
+                           if(message.control==25){
+                               c6=(message.value-63.0)/63.0;
+                               //  c4=(message.value)/127.00;
+                           }
+                           
+                           
+                           if(message.control==26){
+                               c7=(message.value-63.0)/63.0;
+                               //  c4=(message.value)/127.00;
+                           }
+                           if(message.control==27){
+                                c8=(message.value-63.0)/63.00;
+                             //  c8=(message.value)/127.0;
+                              
+                           }
+                           
+                         
+                       }
+                       else if(message.status == MIDI_PITCH_BEND) {
+                           //text << "\tval: " << message.value;
+                       
+                       }
+                       else {
+                           //text << "\tpitch: " << message.pitch;
+                           
+                           
+                          // int N= message.pitch;
+                          // int FN=N-69;
+                           // frequency=pow(2.0,FN/12.0)*440;
+                          
+        
+                           
+                       }
+                       
+                   }//
+        
+               
+               }
+              /******* endmidimessagesbiz*********/
+              
+            
+
         
     }
 

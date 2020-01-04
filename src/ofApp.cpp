@@ -35,8 +35,11 @@
 
 #include "ofApp.h"
 
+#include <string>
 
 #include <iostream>
+
+using namespace std;
 
 ofPolyline tetrahedron;
 ofPolyline pnt_line;
@@ -69,7 +72,14 @@ float frequency=0;
 
 float amp=0;
 
-
+float control1=1;
+float control2=1;
+float control3=1;
+float control4=1;
+float control5=1;
+float control6=1;
+float control7=1;
+float control8=1;
 
 
 float scale1=1;
@@ -150,7 +160,27 @@ void ofApp::setup() {
 	ofBackground(0);
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 	
-    
+    /**MIDIBIX***/
+      
+      // print input ports to console
+      midiIn.listInPorts();
+      
+      // open port by number (you may need to change this)
+      midiIn.openPort(00);
+//      midiIn.openPort("From MPKmini2");    // by name
+      //midiIn.openVirtualPort("ofxMidiIn Input"); // open a virtual port
+      
+      // don't ignore sysex, timing, & active sense messages,
+      // these are ignored by default
+      midiIn.ignoreTypes(false, false, false);
+      
+      // add ofApp as a listener
+    midiIn.addListener(this);
+      
+      // print received messages to the console
+      midiIn.setVerbose(true);
+      
+      /*******/
 
     
     
@@ -309,8 +339,82 @@ void ofApp::update() {
 }
 
 //--------------------------------------------------------------
+void ofApp::newMidiMessage(ofxMidiMessage& msg) {
+
+    // add the latest message to the message queue
+    midiMessages.push_back(msg);
+
+    // remove any old messages if we have too many
+    while(midiMessages.size() > maxMessages) {
+        midiMessages.erase(midiMessages.begin());
+    }
+}
+
+//--------------------------------------------------------------
 void ofApp::draw() {
     
+    
+    /*midimessagesbiz**/
+       
+       
+       //ofTranslate(0,0,-100);
+       for(unsigned int i = 0; i < midiMessages.size(); ++i) {
+
+           ofxMidiMessage &message = midiMessages[i];
+           int x = 10;
+           int y = i*40 + 40;
+       
+           // draw the last recieved message contents to the screen,
+           // this doesn't print all the data from every status type
+           // but you should get the general idea
+           stringstream text;
+           text << ofxMidiMessage::getStatusString(message.status);
+           while(text.str().length() < 16) { // pad status width
+               text << " ";
+           }
+//
+        
+           ofSetColor(127);
+           if(message.status < MIDI_SYSEX) {
+               //text << "chan: " << message.channel;
+               if(message.status == MIDI_CONTROL_CHANGE) {
+
+                   //MIDIMAPZONE
+                   //these are all set to output bipolor controls at this moment (ranging from -1.0 to 1.0)
+                   //if u uncomment the second line on each of these if statements that will switch thems to unipolor
+                   //controls (ranging from 0.0to 1.0) if  you prefer
+                   //then find the variable that youd like to control down in CAVARIABLEZONES or MIXERVARIBLEZONES
+                   //and substitute c1,c2, ..cn whichever control knob u wish the map
+                   
+                   if(message.control==5){
+                       control1=(message.value-63.0)/63.0;
+                       //  c1=(message.value)/127.00;
+                       
+                   }
+                 
+               }
+               else if(message.status == MIDI_PITCH_BEND) {
+                   //text << "\tval: " << message.value;
+               
+               }
+               else {
+                   //text << "\tpitch: " << message.pitch;
+                   
+                   
+                  // int N= message.pitch;
+                  // int FN=N-69;
+                   // frequency=pow(2.0,FN/12.0)*440;
+                  
+
+                   
+               }
+               
+           }//
+
+       
+       }
+      /******* endmidimessagesbiz*********/
+      
     
 
    
@@ -856,6 +960,9 @@ void ofApp::keyPressed(int key){
 //--------------------------------------------------------------
 void ofApp::exit() {
 	
+    // clean up
+    midiIn.closePort();
+    midiIn.removeListener(this);
 	
 }
 

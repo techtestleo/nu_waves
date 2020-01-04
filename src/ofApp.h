@@ -11,11 +11,11 @@
 #pragma once
 
 #include "ofMain.h"
-//#include "ofxMidi.h"
+#include "ofxMidi.h"
 #include "GuiApp.h"
 #include "ofxSyphon.h"
 
-class ofApp : public ofBaseApp {
+class ofApp : public ofBaseApp,  public ofxMidiListener  {
 	
 public:
 	
@@ -34,6 +34,12 @@ public:
 	
     //-----------guibiz
     shared_ptr<GuiApp> gui;
+    // midi
+    void newMidiMessage(ofxMidiMessage& eventArgs);
+    
+    ofxMidiIn midiIn;
+    std::vector<ofxMidiMessage> midiMessages;
+    std::size_t maxMessages = 10; //< max number of messages to keep track of
     
     
 	
