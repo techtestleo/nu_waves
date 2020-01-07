@@ -527,48 +527,50 @@ void GuiApp::newMidiMessage(ofxMidiMessage& message) {
     */
 
    if(message.status < MIDI_SYSEX) {
+    // float message.value so that we can operate on it later.
     float m_val = message.value;
+       
        if(message.status == MIDI_CONTROL_CHANGE) {
            // Knobs 1 - 8
            // value: 0-127
            //(message.value-63.0)/63.0
-              if (message.control == 66) {
-                  // fb 1 brightness
-                  fb0_bright=10+(message.value-63.0)/63.0;
-                                       }
-              if (message.control == 2) {
-                  // hue mod
-                  fb0_huex_mod=10+(message.value-63.0)/63.0;
-              }
-              if (message.control == 3) {
-                  // hue offset
-                  fb0_huex_offset=((message.value-63.0)/63.0);
-                                       }
-              if (message.control == 4) {
-                  // hue lfo
-                  fb0_huex_lfo=(message.value-63.0)/63.0;
-                                       }
-           if (message.control == 5) {
-               // fb 1 brightness
-               fb1_bright=10+(message.value-63.0)/63.0;
-                                    }
-           if (message.control == 6) {
-               // hue mod
-               fb1_huex_mod=10+(message.value-63.0)/63.0;
-           }
-           if (message.control == 7) {
-               // hue offset
-               fb1_huex_offset=((message.value-63.0)/63.0);
-                                    }
-           if (message.control == 8) {
-               // hue lfo
-               fb1_huex_lfo=(message.value-63.0)/63.0;
-//               fb1_huex_lfo_slider->setValue((message.value-63.0)/63.0);
-                                    }
+            if (message.control == 66) {
+            // fb 0 brightness
+            fb0_bright=10+(message.value-63.0)/63.0;
+            }
+            if (message.control == 2) {
+            // fb 0 hue mod
+            fb0_huex_mod=10+(message.value-63.0)/63.0;
+            }
+            if (message.control == 3) {
+            // fb 0 hue offset
+            fb0_huex_offset=((message.value-63.0)/63.0);
+            }
+            if (message.control == 4) {
+            // fb 0 hue lfo
+            fb0_huex_lfo=(message.value-63.0)/63.0;
+            }
+            if (message.control == 5) {
+            // fb 1 brightness
+            fb1_bright=10+(message.value-63.0)/63.0;
+            }
+            if (message.control == 6) {
+            // hue mod
+            fb1_huex_mod=10+(message.value-63.0)/63.0;
+            }
+            if (message.control == 7) {
+            // hue offset
+            fb1_huex_offset=((message.value-63.0)/63.0);
+            }
+            if (message.control == 8) {
+            // hue lfo
+            fb1_huex_lfo=(message.value-63.0)/63.0;
+            }
            
            
            // Pads: ctrl 20-35
            
+           // Pad A: 20 - 27;
            if (message.control == 20) {}
            if (message.control == 21) {}
            if (message.control == 22) {}
@@ -577,6 +579,7 @@ void GuiApp::newMidiMessage(ofxMidiMessage& message) {
            if (message.control == 25) {}
            if (message.control == 26) {}
            if (message.control == 27) {}
+           // Pad B: 28 - 35;
            if (message.control == 28) {}
            if (message.control == 29) {}
            if (message.control == 30) {}
@@ -586,34 +589,29 @@ void GuiApp::newMidiMessage(ofxMidiMessage& message) {
            if (message.control == 34) {}
            if (message.control == 35) {}
            
-           //
-           // pitch bend
-           //up/down
-
+           
+           // Joystick: CC2 on both X and Y axis.
            if (message.control == 69) {
                // y axis joystick, up
                fb0_y_displace=m_val/127;
            }
-           //
            if (message.control == 96) {
                // y axis joystick, down
                fb0_y_displace=-(m_val/127);
-                                     }
+           }
            if (message.control == 24) {
                // x axis joystick, right
                fb0_x_displace=-(m_val/127);
-               
            }
-           //
            if (message.control == 42) {
                // y axis joystick, left
               fb0_x_displace=m_val/127;
            }
+           // End of message.status == MIDI_CONTROL_CHANGE block
        } else if (message.status == MIDI_NOTE_ON) {
-           // pitch: 0 - 120
+           // Keyboard is bound to fb0 luma key value.
            float m_pitch = message.pitch;
            fb0lumakeyvalue=m_pitch/120;
-           
        }
 
 
