@@ -502,15 +502,123 @@ void GuiApp::onButtonEvent(ofxDatGuiButtonEvent e)
     }
 }
 
-void GuiApp::newMidiMessage(ofxMidiMessage& msg) {
+void GuiApp::newMidiMessage(ofxMidiMessage& message) {
 
-    // add the latest message to the message queue
-    midiMessages.push_back(msg);
+    // because we are binding on the event, we don't need a queue.
+    
+    // we can use ->setValue() & ->update(); OR [value]=newValue & ->bind()
+    
+   /* AKAI MPKmini2 mappings
+    
+    Read from the ofxMidi midiInExample project.
+    
+     Pads A 1 - 8: channel 10, ctrl 1-8
+    
+    Pads B 1 - 8: channel 10, ctrl 9-16
+    
+    Knobs 1 - 8:  channel 1, ctrl 16-23
+    
+    joystick L/R: Pitch Bend, channel 1, val:0-16k
+    
+    joystick U/D: channel 1, ctrl 1
+    
+    keys: pitch 48-72
+    
+    */
 
-    // remove any old messages if we have too many
-    while(midiMessages.size() > maxMessages) {
-        midiMessages.erase(midiMessages.begin());
-    }
+   if(message.status < MIDI_SYSEX) {
+    float m_val = message.value;
+       if(message.status == MIDI_CONTROL_CHANGE) {
+           // Knobs 1 - 8
+           // value: 0-127
+           //(message.value-63.0)/63.0
+              if (message.control == 66) {
+                  // fb 1 brightness
+                  fb0_bright=10+(message.value-63.0)/63.0;
+                                       }
+              if (message.control == 2) {
+                  // hue mod
+                  fb0_huex_mod=10+(message.value-63.0)/63.0;
+              }
+              if (message.control == 3) {
+                  // hue offset
+                  fb0_huex_offset=((message.value-63.0)/63.0);
+                                       }
+              if (message.control == 4) {
+                  // hue lfo
+                  fb0_huex_lfo=(message.value-63.0)/63.0;
+                                       }
+           if (message.control == 5) {
+               // fb 1 brightness
+               fb1_bright=10+(message.value-63.0)/63.0;
+                                    }
+           if (message.control == 6) {
+               // hue mod
+               fb1_huex_mod=10+(message.value-63.0)/63.0;
+           }
+           if (message.control == 7) {
+               // hue offset
+               fb1_huex_offset=((message.value-63.0)/63.0);
+                                    }
+           if (message.control == 8) {
+               // hue lfo
+               fb1_huex_lfo=(message.value-63.0)/63.0;
+//               fb1_huex_lfo_slider->setValue((message.value-63.0)/63.0);
+                                    }
+           
+           
+           // Pads: ctrl 20-35
+           
+           if (message.control == 20) {}
+           if (message.control == 21) {}
+           if (message.control == 22) {}
+           if (message.control == 23) {}
+           if (message.control == 24) {}
+           if (message.control == 25) {}
+           if (message.control == 26) {}
+           if (message.control == 27) {}
+           if (message.control == 28) {}
+           if (message.control == 29) {}
+           if (message.control == 30) {}
+           if (message.control == 31) {}
+           if (message.control == 32) {}
+           if (message.control == 33) {}
+           if (message.control == 34) {}
+           if (message.control == 35) {}
+           
+           //
+           // pitch bend
+           //up/down
+
+           if (message.control == 69) {
+               // y axis joystick, up
+               fb0_y_displace=m_val/127;
+           }
+           //
+           if (message.control == 96) {
+               // y axis joystick, down
+               fb0_y_displace=-(m_val/127);
+                                     }
+           if (message.control == 24) {
+               // x axis joystick, right
+               fb0_x_displace=-(m_val/127);
+               
+           }
+           //
+           if (message.control == 42) {
+               // y axis joystick, left
+              fb0_x_displace=m_val/127;
+           }
+       } else if (message.status == MIDI_NOTE_ON) {
+           // pitch: 0 - 120
+           float m_pitch = message.pitch;
+           fb0lumakeyvalue=m_pitch/120;
+           
+       }
+
+
+}
+
 }
 
 
@@ -521,6 +629,7 @@ void GuiApp::newMidiMessage(ofxMidiMessage& msg) {
 void GuiApp::exit() {
     
     // clean up
+//    midiMessages.erase(midiMessages.begin());
     midiIn.closePort();
     midiIn.removeListener(this);
 }
@@ -528,113 +637,8 @@ void GuiApp::exit() {
 
 //------------------------------
     void GuiApp::draw() {
-          /*midimessagesbiz**/
-               
-               
-               //ofTranslate(0,0,-100);
-               for(unsigned int i = 0; i < midiMessages.size(); ++i) {
-        
-                   ofxMidiMessage &message = midiMessages[i];
-                   int x = 10;
-                   int y = i*40 + 40;
-               
-                   // draw the last recieved message contents to the screen,
-                   // this doesn't print all the data from every status type
-                   // but you should get the general idea
-//                   stringstream text;
-//                   text << ofxMidiMessage::getStatusString(message.status);
-//                   while(text.str().length() < 16) { // pad status width
-//                       text << " ";
-//                   }
-        //
-                
-                   ofSetColor(127);
-                   if(message.status < MIDI_SYSEX) {
-                       //text << "chan: " << message.channel;
-                       if(message.status == MIDI_CONTROL_CHANGE) {
-        
-                           //MIDIMAPZONE
-                           //these are all set to output bipolor controls at this moment (ranging from -1.0 to 1.0)
-                           //if u uncomment the second line on each of these if statements that will switch thems to unipolor
-                           //controls (ranging from 0.0to 1.0) if  you prefer
-                           //then find the variable that youd like to control down in CAVARIABLEZONES or MIXERVARIBLEZONES
-                           //and substitute c1,c2, ..cn whichever control knob u wish the map
-                           
-                           if(message.control==5){
-                               c1=(message.value-63.0)/63.0;
-                               //  c1=(message.value)/127.00;
-                               fb0_x_displace_slider->setValue(c1);
-                               
-                           }
-                           
-                           if(message.control==21){
-                               c2=(message.value-63.0)/63.0;
-                               //  c2=(message.value)/127.00;
-                               
-                           }
-                           
-                           if(message.control==22){
-                               c3=(message.value-63.0)/63.00;
-                               //  c3=(message.value)/127.00;
-                           }
-                           
-                           if(message.control==23){
-                                c4=(message.value-63.0)/63.00;
-                              // c4=(message.value)/127.00;
-                              
-                           }
-                           
-                           if(message.control==24){
-                                c5=(message.value-63.0)/63.00;
-                             //  c5=(message.value)/127.00;
-                             
-                           }
-                           if(message.control==25){
-                               c6=(message.value-63.0)/63.0;
-                               //  c4=(message.value)/127.00;
-                           }
-                           
-                           
-                           if(message.control==26){
-                               c7=(message.value-63.0)/63.0;
-                               //  c4=(message.value)/127.00;
-                           }
-                           if(message.control==27){
-                                c8=(message.value-63.0)/63.00;
-                             //  c8=(message.value)/127.0;
-                              
-                           }
-                           
-                         
-                       }
-                       else if(message.status == MIDI_PITCH_BEND) {
-                           //text << "\tval: " << message.value;
-                       
-                       }
-                       else {
-                           //text << "\tpitch: " << message.pitch;
-                           
-                           
-                          // int N= message.pitch;
-                          // int FN=N-69;
-                           // frequency=pow(2.0,FN/12.0)*440;
-                          
-        
-                           
-                       }
-                       
-                   }//
-        
-               
-               }
-              /******* endmidimessagesbiz*********/
-              
-            
-
-        
+    
     }
-
-
 //---------------------------
 
 
