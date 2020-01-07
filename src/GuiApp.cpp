@@ -55,14 +55,7 @@ string B_0="B0 ";
 string B_1="B1 ";
 string XY="X / Y";
 // midi
-float c1=1;
-float c2=1;
-float c3=1;
-float c4=1;
-float c5=1;
-float c6=1;
-float c7=1;
-float c8=1;
+float hue_mod_range = 3;
 //
 // int guiscale=100;
 int guiwidth=275;
@@ -540,7 +533,7 @@ void GuiApp::newMidiMessage(ofxMidiMessage& message) {
             }
             if (message.control == 2) {
             // fb 0 hue mod
-            fb0_huex_mod=10+(message.value-63.0)/63.0;
+            fb0_huex_mod=10+(hue_mod_range*((message.value-63.0)/63.0));
             }
             if (message.control == 3) {
             // fb 0 hue offset
@@ -555,15 +548,15 @@ void GuiApp::newMidiMessage(ofxMidiMessage& message) {
             fb1_bright=10+(message.value-63.0)/63.0;
             }
             if (message.control == 6) {
-            // hue mod
-            fb1_huex_mod=10+(message.value-63.0)/63.0;
+            // fb 1 hue mod
+            fb1_huex_mod=10+(hue_mod_range*((message.value-63.0)/63.0));
             }
             if (message.control == 7) {
-            // hue offset
+            // fb 1 hue offset
             fb1_huex_offset=((message.value-63.0)/63.0);
             }
             if (message.control == 8) {
-            // hue lfo
+            // fb 1 hue lfo
             fb1_huex_lfo=(message.value-63.0)/63.0;
             }
            
