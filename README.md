@@ -1,4 +1,10 @@
+# nu_waves
+A fork of [LIL_WAAVES](https://github.com/ex-zee-ex/VIDEO_WAAAVES_1_75) with support for an AKAI MPKmini2.
+
+Mini mapping file can be found bin/xy.mk2.
+
 # VIDEO_WAAAVES_1.5
+
 a video mixer, framebuffer delay, and feedback resynthesis engine built in openFrameworks https://openframeworks.cc/
 
 ![Image description](https://github.com/ex-zee-ex/VIDEO_WAAAVES_1_5/blob/master/hypercuuube.png)
